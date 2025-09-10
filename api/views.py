@@ -3,11 +3,22 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .models import Question, Answer
-from .serializers import .
+from .serializers import (
+    QuestionListSerializer,
+    QuestionWithAnswersSerializer,
+    QuestionCreateSerializer,
+    AnswerSerializer,
+    AnswerCreateSerializer
+)
 
 class QuestionListCreateView(generics.ListCreateAPIView):
     queryset = Question.objects.all()
-    serializer_class = QuestionListSerializer if self.request.method == 'GET' else QuestionCreateSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return QuestionListSerializer
+        if self.request.method == 'POST':
+            return QuestionCreateSerializer
 
 class QuestionDetailView(generics.RetrieveDestroyAPIView):
     queryset = Question.objects.all()

@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from .models import Question, Answer
 
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['id', 'question_id', 'user_id', 'text', 'created_at']
+        read_only_fields = ['id', 'created_at']
+
 class QuestionListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
@@ -17,7 +23,7 @@ class QuestionWithAnswersSerializer(serializers.ModelSerializer):
 
 class QuestionCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Questionmodel = Question
+        model = Question
         fields = ['id', 'text', 'created_at']
         read_only_fields = ['id', 'created_at']
 
@@ -26,13 +32,9 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Question text cannot be empty")
         return value
 
-class AnswerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Answer
-        fields = ['id', 'question_id', 'user_id', 'text', 'created_at']
-        read_only_fields = ['id', 'created_at']
-
 class AnswerCreateSerializer(serializers.ModelSerializer):
+    user_id = serializers.CharField(required=True) 
+
     class Meta:
         model = Answer
         fields = ['text', 'user_id']
@@ -43,6 +45,8 @@ class AnswerCreateSerializer(serializers.ModelSerializer):
         return value
     
     def validate_user_id(self, value):
+        if not value:
+            raise serializers.ValidationError("user_id cannot be empty")
         if not value.strip():
             raise serializers.ValidationError("No user specified")
         return value
