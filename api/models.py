@@ -1,5 +1,4 @@
 from django.db import models
-import uuid
 
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
@@ -13,7 +12,7 @@ class Question(models.Model):
 class Answer(models.Model):
     id = models.AutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
-    user_id = models.UUIDField(default=uuid.uuid4, editable=False)
+    user_id = models.TextField(editable=False)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     

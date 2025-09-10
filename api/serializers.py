@@ -29,3 +29,8 @@ class AnswerCreateSerializer(serializers.ModelSerializer):
         if not value.strip():
             raise serializers.ValidationError("Answer text cannot be empty")
         return value
+    
+    def validate_user_id(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("No user specified")
+        return value
