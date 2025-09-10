@@ -3,15 +3,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .models import Question, Answer
-from .serializers import QuestionSerializer, AnswerSerializer, AnswerCreateSerializer
+from .serializers import .
 
 class QuestionListCreateView(generics.ListCreateAPIView):
     queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
+    serializer_class = QuestionListSerializer if self.request.method == 'GET' else QuestionCreateSerializer
 
 class QuestionDetailView(generics.RetrieveDestroyAPIView):
     queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
+    serializer_class = QuestionWithAnswersSerializer
 
 class AnswerCreateView(generics.CreateAPIView):
     queryset = Answer.objects.all()
